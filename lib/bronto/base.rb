@@ -2,7 +2,7 @@ module Bronto
 
   # According to Bronto's API documentation, the session credential returned by the
   # login() API call remains active for 20 minutes.  In addition, the expiration time
-  # is reset after each successful use.  We will trigger a refresh before 20 minutes 
+  # is reset after each successful use.  We will trigger a refresh before 20 minutes
   # to be on the safe side
   SESSION_REUSE_SECONDS = 120
 
@@ -52,7 +52,8 @@ module Bronto
       @api = Savon.client(wsdl: 'https://api.bronto.com/v4?wsdl', soap_header: {
                                                                    "tns:sessionHeader" => { session_id: resp.body[:login_response][:return] }
                                                                   },
-                                                                  read_timeout: 600) # Give Bronto up to 10 minutes to reply
+                                                                  read_timeout: 600, # Give Bronto up to 10 minutes to reply
+                                                                  log_level: :error)
     end
 
     # returns true if a cached session identifier is missing or is too old
