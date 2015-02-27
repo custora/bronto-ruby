@@ -53,7 +53,7 @@ module Bronto
                                                                    "tns:sessionHeader" => { session_id: resp.body[:login_response][:return] }
                                                                   },
                                                                   read_timeout: 600, # Give Bronto up to 10 minutes to reply
-                                                                  log_level: :error)
+                                                                  log: false)
     end
 
     # returns true if a cached session identifier is missing or is too old
