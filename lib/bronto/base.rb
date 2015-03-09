@@ -7,7 +7,7 @@ module Bronto
   SESSION_REUSE_SECONDS = 120
 
   class Base
-    attr_accessor :id, :api_key, :errors
+    attr_accessor :id, :api_key, :errors, :ssl_cert_file
 
     @@api_key = nil
 
@@ -49,11 +49,22 @@ module Bronto
       client = Savon.client(wsdl: 'https://api.bronto.com/v4?wsdl')
       resp = client.call(:login, message: { api_token: api_key })
 
-      @api = Savon.client(wsdl: 'https://api.bronto.com/v4?wsdl', soap_header: {
-                                                                   "tns:sessionHeader" => { session_id: resp.body[:login_response][:return] }
-                                                                  },
-                                                                  read_timeout: 600, # Give Bronto up to 10 minutes to reply
-                                                                  log: false)
+      s_header = {
+        "tns:sessionHeader" => { session_id: resp.body[:login_response][:return] }
+      }
+
+      @api = Savon.client do
+        ssl_version :TLSv1
+        if @ssl_cert_file && File.exist?(@ssl_cert_file)
+          ssl_ca_cert_file @ssl_cert_file
+        else
+          ssl_verify_mode :none
+        end
+        wsdl 'https://api.bronto.com/v4?wsdl'
+        soap_header s_header
+        read_timeout 600
+        log false
+      end
     end
 
     # returns true if a cached session identifier is missing or is too old
