@@ -11,6 +11,8 @@ module Bronto
 
     @@api_key = nil
 
+    HTTPI.log = false
+
     # Getter/Setter for global API Key.
     def self.api_key=(api_key)
       @@api_key = api_key
