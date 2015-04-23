@@ -74,7 +74,6 @@ module Bronto
         wsdl 'https://api.bronto.com/v4?wsdl'
         soap_header s_header
         read_timeout 600
-        log false
       end
     end
 
