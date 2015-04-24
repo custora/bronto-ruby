@@ -11,8 +11,6 @@ module Bronto
 
     @@api_key = nil
 
-    HTTPI.log = false
-
     # Getter/Setter for global API Key.
     def self.api_key=(api_key)
       @@api_key = api_key
@@ -51,6 +49,7 @@ module Bronto
       client = Savon.client do
         wsdl 'https://api.bronto.com/v4?wsdl'
         ssl_version :TLSv1
+        logger Logger.new('/dev/null')
         if @ssl_cert_file && File.exist?(@ssl_cert_file)
           ssl_ca_cert_file @ssl_cert_file
         else
@@ -64,8 +63,11 @@ module Bronto
         "tns:sessionHeader" => { session_id: resp.body[:login_response][:return] }
       }
 
+      HTTPI.log = false
+
       @api = Savon.client do
         ssl_version :TLSv1
+        logger Logger.new('/dev/null')
         if @ssl_cert_file && File.exist?(@ssl_cert_file)
           ssl_ca_cert_file @ssl_cert_file
         else
