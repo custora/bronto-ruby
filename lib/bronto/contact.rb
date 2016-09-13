@@ -18,11 +18,12 @@ module Bronto
       Array.wrap(resp[:return]).map { |hash| new(hash) }
     end
 
-    def self.save(*objs)
+    def self.save(*objs, **options)
       objs = objs.flatten
       api_key = objs.first.is_a?(String) ? objs.shift : self.api_key
 
-      resp = request(:add_or_update, {plural_class_name => objs.map(&:to_hash)})
+      request_method = options[:update_only] ? :update : :add_or_update
+      resp = request(request_method, {plural_class_name => objs.map(&:to_hash)})
 
       objs.each { |o| o.errors.clear }
 
