@@ -14,6 +14,11 @@ module Bronto
       Array.wrap(resp[:return][:results]).select { |r| r[:is_error] }.count == 0
     end
 
+    def self.find_list(filter)
+      api_key = self.api_key
+      request(:read, filter: filter.to_hash, page_number: 1)
+    end
+
     def initialize(options = {})
       super(options)
       self.active_count ||= 0
