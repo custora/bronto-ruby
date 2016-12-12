@@ -15,7 +15,7 @@ module Bronto
     end
 
     def self.find_list(filter)
-      api_key = self.api_key
+      api_key = lists.first.is_a?(String) ? lists.shift : self.api_key
       request(:read, filter: filter.to_hash, page_number: 1)
     end
 
