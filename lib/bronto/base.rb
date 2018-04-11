@@ -48,7 +48,7 @@ module Bronto
 
       client = Savon.client do
         wsdl 'https://api.bronto.com/v4?wsdl'
-        ssl_version :TLSv1
+        ssl_version :TLSv1_2
         logger Logger.new('/dev/null')
         if @ssl_cert_file && File.exist?(@ssl_cert_file)
           ssl_ca_cert_file @ssl_cert_file
@@ -66,7 +66,7 @@ module Bronto
       HTTPI.log = false
 
       @api = Savon.client do
-        ssl_version :TLSv1
+        ssl_version :TLSv1_2
         logger Logger.new('/dev/null')
         if @ssl_cert_file && File.exist?(@ssl_cert_file)
           ssl_ca_cert_file @ssl_cert_file
